@@ -61,6 +61,39 @@ class MemesCog(commands.Cog):
                 self.voice_client = await voice_channel.connect(reconnect=True)
         await ctx.guild.change_voice_state(channel=voice_channel, self_deaf=True)
 
+    async def disconnect(self, ctx):
+        await ctx.guild.change_voice_state(channel=None)
+
+    @commands.command(brief='mute everyone')
+    async def mute(self, ctx):
+        member = ctx.author
+        voice_state = member.voice
+        voice_channel = voice_state.channel
+        for member in voice_channel.members:
+            try:
+                if member.voice:
+                    await member.edit(mute=True)
+            except:
+                pass
+        await ctx.send("muted everyone", delete_after=30)
+        await ctx.message.delete()
+        await self.connect(ctx)
+
+    @commands.command(brief='unmute everyone')
+    async def unmute(self, ctx):
+        member = ctx.author
+        voice_state = member.voice
+        voice_channel = voice_state.channel
+        for member in voice_channel.members:
+            try:
+                if member.voice:
+                    await member.edit(mute=False)
+            except:
+                pass
+        await ctx.send("unmuted everyone", delete_after=30)
+        await ctx.message.delete()
+        await self.disconnect(ctx)
+
     @commands.command()
     async def sudo(self, ctx):
         original_message = ctx.message
