@@ -8,6 +8,7 @@ from discord import FFmpegOpusAudio
 class MemesCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.voice_client = None
 
     @commands.command(brief='Display invite link')
     async def invite(self, ctx):
