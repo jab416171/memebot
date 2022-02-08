@@ -118,7 +118,6 @@ class MemesCog(commands.Cog):
         new_message = new_message.replace(mention.display_name, "").replace("@", "")
         await webhook.send(username = mention.display_name, avatar_url = mention.avatar, content = new_message)
 
-
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def cleanup(self, ctx):
