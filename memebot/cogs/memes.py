@@ -118,6 +118,22 @@ class MemesCog(commands.Cog):
         new_message = new_message.replace(mention.display_name, "").replace("@", "")
         await webhook.send(username = mention.display_name, avatar_url = mention.avatar, content = new_message)
 
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def cleanup(self, ctx):
+        await ctx.message.delete()
+        channel = ctx.message.channel
+        messages = await channel.history(limit=100).flatten()
+        await channel.delete_messages(messages)
+        async for h in channel.history():
+            await h.delete()
+
+    @commands.command()
+    async def shitpc(self, ctx):
+        await ctx.send(":regional_indicator_s: :regional_indicator_h: :regional_indicator_i: :regional_indicator_t: :regional_indicator_p: :regional_indicator_c:", delete_after=15)
+        await ctx.message.delete()
+
     @commands.slash_command(guild_ids=[912905291459338260], name="nick")
     async def slash_nick(self, ctx, extra: Option(str, required=False)):
         user = "<@!911313391484825610>"
