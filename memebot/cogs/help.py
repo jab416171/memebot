@@ -35,7 +35,7 @@ class HelpCog(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         """ Set presence to let users know the help command. """
-        activity = discord.Activity(type=discord.ActivityType.listening, name="I am a simple discord bot")
+        activity = discord.Activity(type=discord.ActivityType.listening, name="the best memes of 2003")
         await self.bot.change_presence(activity=activity)
 
     async def cog_before_invoke(self, ctx):
@@ -72,7 +72,7 @@ class HelpCog(commands.Cog):
     @commands.command(brief='Display the help menu')  # TODO: Add 'or details of the specified command'
     async def help(self, ctx):
         """ Generate and send help embed based on the bot's commands. """
-        embed = self.help_embed('__Simple Bot Commands__')
+        embed = self.help_embed('__memebot Commands__')
         await ctx.send(embed=embed, delete_after=30)
         try:
             await ctx.message.delete()
