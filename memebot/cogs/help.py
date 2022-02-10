@@ -29,7 +29,6 @@ class HelpCog(commands.Cog):
                         embed.add_field(name=f'**{prefix}{cmd.usage}**', value=f'_{cmd.brief}_', inline=True)
                     else:
                         embed.add_field(name=f'**{prefix}{cmd.name}**', value=f'_{cmd.brief}_', inline=True)
-
         return embed
 
     @commands.Cog.listener()
