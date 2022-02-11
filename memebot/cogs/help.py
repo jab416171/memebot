@@ -147,3 +147,48 @@ class HelpCog(commands.Cog):
         #     await webhook.send(username = chosen_member.display_name, avatar_url = avatar, content = original_message.content)
         # except:
         #     print('webhook send failed')
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        notifications_channel = None
+        guild = member.guild
+        for channel in guild.channels:
+            if isinstance(channel, discord.CategoryChannel):
+                continue
+            if channel.name == "notifications":
+                notifications_channel = channel
+        await notifications_channel.send(f"{member.mention} (nick: {member.display_name} name: {member.name}#{member.discriminator}) has left the server.")
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        guild = member.guild
+        system_channel = guild.system_channel
+        for channel in guild.text_channels:
+            try:
+                await channel.send("<@!136184754910396416> we have a new member, please approve them kthx", delete_after=5)
+            except:
+                pass
+        for i in range(0, 25):
+            await system_channel.send(f"{member.mention} Thank you for signing up for discord. Now you will need to wait until a member of our staff has taken time to go through your discord account, all of your games, and of course your finances. This won't hurt (probably). https://tenor.com/view/hehe-evil-gif-5918528 <@&930267568323842129>")
+        notifications_channel = None
+        guild = member.guild
+        for channel in guild.channels:
+            if isinstance(channel, discord.CategoryChannel):
+                continue
+            if channel.name == "notifications":
+                notifications_channel = channel
+        await notifications_channel.send(f"{member.mention} has joined the server.")
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if payload.guild_id is None:
+            return  # Reaction is on a private message
+        guild = self.bot.get_guild(payload.guild_id)
+        member = guild.get_member(payload.user_id)
+        channel = self.bot.get_channel(payload.channel_id)
+        if channel.name == "rules":
+            try:
+                await member.ban()
+            except:
+                for channel in guild.text_channels:
+                    await channel.send(f"Can't ban {member.mention}, missing permissions")
