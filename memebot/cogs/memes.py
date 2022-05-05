@@ -1,4 +1,6 @@
 import discord
+import random
+import time
 from discord.ext import commands
 from discord.commands import Option, permissions, SlashCommandGroup, CommandPermission
 
@@ -73,7 +75,7 @@ class MemesCog(commands.Cog):
         for member in voice_channel.members:
             try:
                 if member.voice:
-                    await member.edit(mute=True)
+                    await member.edit(mute=True, deafen=True)
             except:
                 pass
         await ctx.send("muted everyone", delete_after=30)
@@ -88,12 +90,41 @@ class MemesCog(commands.Cog):
         for member in voice_channel.members:
             try:
                 if member.voice:
-                    await member.edit(mute=False)
+                    await member.edit(mute=False, deafen=False)
             except:
                 pass
         await ctx.send("unmuted everyone", delete_after=30)
         await ctx.message.delete()
         await self.disconnect(ctx)
+
+    @commands.slash_command(name="roll")
+    async def roll(self, ctx, sides: Option(int, "Number of sides on the die", default=6)):
+        """roll a die"""
+        number = random.randint(1, sides)
+        response = await ctx.respond("rolling ...")
+        time.sleep(0.2)
+        await response.edit_original_message(content="rolling 0..")
+        time.sleep(0.2)
+        await response.edit_original_message(content="rolling .0.")
+        time.sleep(0.2)
+        await response.edit_original_message(content="rolling ..0")
+        time.sleep(0.2)
+        await response.edit_original_message(content=f"You rolled a {number}")
+
+    @commands.slash_command(name="flip")
+    async def flip(self, ctx):
+        """flip a coin"""
+        number = random.randint(1, 2)
+        response = await ctx.respond("flipping -")
+        time.sleep(0.2)
+        await response.edit_original_message(content="flipping |")
+        time.sleep(0.2)
+        await response.edit_original_message(content="flipping -")
+        time.sleep(0.2)
+        await response.edit_original_message(content="flipping |")
+        time.sleep(0.2)
+        number = "heads" if number == 1 else "tails"
+        await response.edit_original_message(content=f"It's {number}")
 
     @commands.command()
     async def sudo(self, ctx):
